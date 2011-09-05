@@ -8,7 +8,7 @@
  *
  * Created on Aug 27, 2011, 11:11:50 AM
  */
-package buckley.DrawingTool;
+package buckley.DrawingTool.gui;
 
 /**
  *
@@ -30,7 +30,7 @@ public class DrawingToolFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        drawingToolPanel = new buckley.DrawingTool.DrawingToolPanel();
+        drawingToolPanel = new buckley.DrawingTool.gui.DrawingToolPanel();
         menuBar = new javax.swing.JMenuBar();
         drawingToolMenu = new javax.swing.JMenu();
         aboutMenuItem = new javax.swing.JMenuItem();
@@ -100,7 +100,7 @@ private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JMenu drawingToolMenu;
-    private buckley.DrawingTool.DrawingToolPanel drawingToolPanel;
+    private buckley.DrawingTool.gui.DrawingToolPanel drawingToolPanel;
     private javax.swing.JMenuBar menuBar;
     // End of variables declaration//GEN-END:variables
 }

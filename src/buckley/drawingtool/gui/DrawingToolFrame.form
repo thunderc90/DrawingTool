@@ -44,7 +44,7 @@
 
   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
   <SubComponents>
-    <Component class="buckley.DrawingTool.DrawingToolPanel" name="drawingToolPanel">
+    <Component class="buckley.DrawingTool.gui.DrawingToolPanel" name="drawingToolPanel">
       <Properties>
         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[250, 250]"/>

@@ -2,8 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package buckley.DrawingTool;
+package buckley.DrawingTool.gui;
 
+import buckley.DrawingTool.FreeLineShapeMaker;
+import buckley.DrawingTool.interfaces.Tool;
+import buckley.DrawingTool.interfaces.ShapeInterface;
+import buckley.DrawingTool.enums.ToolType;
 import java.awt.Color;
 import java.util.ArrayList;
 
@@ -14,12 +18,13 @@ import java.util.ArrayList;
 public class DrawingToolStatus {
     private static DrawingToolStatus _instance;
     
-    private ArrayList<Shape> shapesList;
+    private ArrayList<ShapeInterface> shapesList;
     
     private Tool currentTool;
-    private ToolTypeEnum currentToolType;
+    private ToolType currentToolType;
     private Color currentColor;
     private boolean currentIsFilled;
+    private int currentLineWidth;
     private ArrayList<Tool> toolList;
     
     static DrawingToolStatus getInstance(){
@@ -32,7 +37,7 @@ public class DrawingToolStatus {
     private DrawingToolStatus() {
         currentColor = new Color(255, 102, 0);
         currentIsFilled = false;
-        shapesList = new ArrayList<Shape>();
+        shapesList = new ArrayList<ShapeInterface>();
         
         //initialize toolList
         toolList = new ArrayList<Tool>();
@@ -67,11 +72,11 @@ public class DrawingToolStatus {
         return currentTool;
     }
 
-    ToolTypeEnum getCurrentToolType() {
+    ToolType getCurrentToolType() {
         return currentToolType;
     }
 
-    ArrayList<Shape> getShapes() {
+    ArrayList<ShapeInterface> getShapes() {
         return shapesList;
     }
     
@@ -80,7 +85,32 @@ public class DrawingToolStatus {
         return  toolList.toArray(t);
     }
 
-    void Undo() {
-        shapesList.remove(shapesList.size()-1);
+    void removeLastShape() {
+        if(!shapesList.isEmpty())
+            shapesList.remove(shapesList.size()-1);
+    }
+    
+    void clearShapes() {
+        if(!shapesList.isEmpty())
+            shapesList = new ArrayList<ShapeInterface>();
+    }
+    
+    void addShape(ShapeInterface s) {
+        if(s != null) {
+            shapesList.add(s);
+        }
+    }
+    
+    boolean getCurrentIsFilled() {
+        return currentIsFilled;
+    }
+    
+    int getCurrentLineWidth() {
+        return currentLineWidth;
+    }
+    
+    void setCurrentLineWidth(int newWidth) {
+        currentLineWidth = newWidth;
     }
  }
+

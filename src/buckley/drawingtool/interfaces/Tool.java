@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package buckley.DrawingTool;
+package buckley.DrawingTool.interfaces;
 
+import buckley.DrawingTool.enums.ToolType;
 import java.awt.Point;
 
 /**
@@ -13,7 +14,7 @@ import java.awt.Point;
 public interface Tool {
     
     
-    public void performAction(Point p1, Point p2);
+    public void performAction(Point p1);
     public void mouseReleased();
-    public ToolTypeEnum getToolType();
+    public ToolType getToolType();
 }

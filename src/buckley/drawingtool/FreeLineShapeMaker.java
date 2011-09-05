@@ -4,7 +4,12 @@
  */
 package buckley.DrawingTool;
 
+import buckley.DrawingTool.gui.ShapeMaker;
+import buckley.DrawingTool.interfaces.ShapeInterface;
+import buckley.DrawingTool.enums.ToolType;
+import java.awt.Graphics2D;
 import java.awt.Point;
+
 
 /**
  *
@@ -13,18 +18,19 @@ import java.awt.Point;
 public class FreeLineShapeMaker extends ShapeMaker {
 
     @Override
-    Shape initializeNewShape() {
+    protected ShapeInterface initializeNewShape() {
         return new FreeLineShape();
-    }   
-    
-    @Override
-    public String toString(){
-        return "Free Draw Tool";
     }
 
     @Override
-    public ToolTypeEnum getToolType() {
-        return ToolTypeEnum.SHAPE_MAKER;
+    public ToolType getToolType() {
+        return ToolType.SHAPE_MAKER_TOOL;
     }
     
+    @Override
+    public String toString() {
+        return "Pen Tool";
+    }
+
+       
 }

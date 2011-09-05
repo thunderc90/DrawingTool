@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package buckley.DrawingTool;
+package buckley.DrawingTool.gui;
 
 import java.awt.Color;
 import java.util.ArrayList;

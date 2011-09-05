@@ -8,10 +8,13 @@
  *
  * Created on Aug 27, 2011, 11:12:41 AM
  */
-package buckley.DrawingTool;
+package buckley.DrawingTool.gui;
 
+import buckley.DrawingTool.interfaces.Tool;
+import buckley.DrawingTool.enums.ToolType;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
@@ -49,7 +52,7 @@ public class DrawingToolPanel extends javax.swing.JPanel {
         undoButton = new javax.swing.JButton();
         clearButton = new javax.swing.JButton();
         lineWidthSlider = new javax.swing.JSlider();
-        canvas = new java.awt.Canvas();
+        canvas = canvas = new DrawingToolCanvas();
 
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 0, 0)));
         setMinimumSize(new java.awt.Dimension(150, 150));
@@ -126,14 +129,12 @@ public class DrawingToolPanel extends javax.swing.JPanel {
 
         add(toolSelectorPanel, java.awt.BorderLayout.PAGE_START);
 
-        canvas.setBackground(java.awt.Color.white);
-        canvas.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         canvas.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                canvasMousePressed(evt);
-            }
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 canvasMouseReleased(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                canvasMousePressed(evt);
             }
         });
         canvas.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
@@ -146,31 +147,43 @@ public class DrawingToolPanel extends javax.swing.JPanel {
 
 private void toolSelectorComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toolSelectorComboBoxActionPerformed
     Tool t = (Tool) toolSelectorComboBox.getSelectedItem();
-    DrawingToolStatus.getInstance().setCurrentTool(t);
+    
+    
+    DrawingToolStatus dts = DrawingToolStatus.getInstance();
+    
+    dts.setCurrentTool(t);
+    
+    //adjust toolselection bar for tooltype
+    switch(dts.getCurrentToolType()) {
+        case SHAPE_MAKER_TOOL:
+            colorChooserPanel.setVisible(true);
+            isFilledRadioButton.setVisible(false);
+            lineWidthSlider.setVisible(true);
+            break;
+        case SHAPE_MAKER_TOOL_FILLABLE:
+            colorChooserPanel.setVisible(true);
+            isFilledRadioButton.setVisible(true);
+            lineWidthSlider.setVisible(true);
+        case MANIPULATOR_TOOL:
+            colorChooserPanel.setVisible(false);
+            isFilledRadioButton.setVisible(false);
+            lineWidthSlider.setVisible(false);
+            break;
+        default: 
+            break;
+    }
+    
     repaint();
 }//GEN-LAST:event_toolSelectorComboBoxActionPerformed
 
 private void colorChooserPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_colorChooserPanelMouseClicked
+    DrawingToolStatus dts = DrawingToolStatus.getInstance();
     Color newColor = JColorChooser.showDialog(this, "Drawing Color", 
-            DrawingToolStatus.getInstance().getCurrentColor());
-    DrawingToolStatus.getInstance().setCurrentColor(newColor);
+            dts.getCurrentColor());
+    dts.setCurrentColor(newColor);
+    colorChooserPanel.setBackground(dts.getCurrentColor());
     repaint();
 }//GEN-LAST:event_colorChooserPanelMouseClicked
-
-private void canvasMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canvasMousePressed
-    drawStartPoint = evt.getPoint();
-    repaint();
-}//GEN-LAST:event_canvasMousePressed
-
-private void canvasMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canvasMouseDragged
-    DrawingToolStatus.getInstance().getCurrentTool().performAction(drawStartPoint, evt.getPoint());
-    repaint();
-}//GEN-LAST:event_canvasMouseDragged
-
-private void canvasMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canvasMouseReleased
-    DrawingToolStatus.getInstance().getCurrentTool().mouseReleased();
-    repaint();
-}//GEN-LAST:event_canvasMouseReleased
 
 private void isFilledRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_isFilledRadioButtonActionPerformed
     DrawingToolStatus.getInstance().setCurrentIsFilled(
@@ -179,42 +192,35 @@ private void isFilledRadioButtonActionPerformed(java.awt.event.ActionEvent evt) 
 }//GEN-LAST:event_isFilledRadioButtonActionPerformed
 
 private void undoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoButtonActionPerformed
-    DrawingToolStatus.getInstance().Undo();
-    
+    DrawingToolStatus.getInstance().removeLastShape();
+    repaint();
 }//GEN-LAST:event_undoButtonActionPerformed
+
+private void canvasMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canvasMouseDragged
+    DrawingToolStatus.getInstance().getCurrentTool().performAction(
+            evt.getPoint());
+    repaint();
+}//GEN-LAST:event_canvasMouseDragged
+
+private void canvasMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canvasMouseReleased
+    DrawingToolStatus.getInstance().getCurrentTool().mouseReleased();
+    repaint();
+}//GEN-LAST:event_canvasMouseReleased
+
+private void canvasMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canvasMousePressed
+    DrawingToolStatus.getInstance().getCurrentTool().performAction(
+            evt.getPoint());
+    repaint();
+}//GEN-LAST:event_canvasMousePressed
 
     @Override
 public void paintComponent(Graphics g){
     super.paintComponent(g);
     
     DrawingToolStatus dts = DrawingToolStatus.getInstance();
-    switch(dts.getCurrentToolType()) {
-        case SHAPE_MAKER:
-            colorChooserPanel.setVisible(true);
-            isFilledRadioButton.setVisible(true);
-            break;
-        case DELETE:
-            colorChooserPanel.setVisible(false);
-            isFilledRadioButton.setVisible(false);
-            break;
-        default: 
-            break;
-    }
     
-    
-    colorChooserPanel.setBackground(dts.getCurrentColor());
-    
-    //refresh previously drawn shapes
-    ArrayList<Shape> shapes = dts.getShapes();
-    Graphics gc = canvas.getGraphics();
-    for(Shape s : shapes) {
-        s.draw(gc);
-    }
-    
-    //draw current shape if applicable
-    if(dts.getCurrentToolType() == ToolTypeEnum.SHAPE_MAKER) {
-        ((ShapeMaker)dts.getCurrentTool()).draw(gc);
-    }
+    canvas.repaint();
+         
 }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
