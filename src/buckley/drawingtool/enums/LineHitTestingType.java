@@ -8,7 +8,7 @@ package buckley.DrawingTool.enums;
  *
  * @author Thunder
  */
-public enum ShapeType {
-    REG_SHAPE,
-    FILLABLE_SHAPE
+public enum LineHitTestingType {
+    HIT_TESTING_ALONG,
+    HIT_TESTING_END_POINTS
 }

@@ -10,6 +10,10 @@
  */
 package buckley.DrawingTool.gui;
 
+import buckley.DrawingTool.enums.DeleteType;
+import buckley.DrawingTool.enums.LineHitTestingType;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Thunder
@@ -19,6 +23,26 @@ public class DrawingToolFrame extends javax.swing.JFrame {
     /** Creates new form NewJFrame */
     public DrawingToolFrame() {
         initComponents();
+        
+        //----------------BUTTON GROUPS ---------------
+        //delete type selections
+        deleteTypeButtonGroup.add(deleteAllCheckBox);
+        deleteTypeButtonGroup.add(deleteTopCheckBox);
+        deleteTypeButtonGroup.setSelected(deleteAllCheckBox.getModel(), true);
+        
+        //Hit Testing Line
+        lineHitTestingButtonGroup.add(lineHitTestingEndPointsCheckBox);
+        lineHitTestingButtonGroup.add(lineHitTestingAlongCheckbox);
+        lineHitTestingButtonGroup.setSelected(lineHitTestingAlongCheckbox.getModel(), true);
+        
+        //xor Strategy Options
+        xorStrategyButtonGroup.add(xorStrategyONCheckBox);
+        xorStrategyButtonGroup.add(xorStrategyOFFCheckBox);
+        xorStrategyButtonGroup.setSelected(xorStrategyONCheckBox.getModel(), true);
+        
+        imageBufferStrategyButtonGroup.add(imageBufferONCheckBox);
+        imageBufferStrategyButtonGroup.add(imageBufferOFFCheckBox);
+        imageBufferStrategyButtonGroup.setSelected(imageBufferONCheckBox.getModel(), true);
     }
 
     /** This method is called from within the constructor to
@@ -30,18 +54,40 @@ public class DrawingToolFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        deleteTypeButtonGroup = new javax.swing.ButtonGroup();
+        lineHitTestingButtonGroup = new javax.swing.ButtonGroup();
+        xorStrategyButtonGroup = new javax.swing.ButtonGroup();
+        imageBufferStrategyButtonGroup = new javax.swing.ButtonGroup();
         drawingToolPanel = new buckley.DrawingTool.gui.DrawingToolPanel();
         menuBar = new javax.swing.JMenuBar();
         drawingToolMenu = new javax.swing.JMenu();
         aboutMenuItem = new javax.swing.JMenuItem();
+        exitMenuItem = new javax.swing.JMenuItem();
+        editMenu = new javax.swing.JMenu();
+        undoMenuItem = new javax.swing.JMenuItem();
+        clearMenuItem = new javax.swing.JMenuItem();
+        optionsMenu = new javax.swing.JMenu();
+        deleteSchemeMenu = new javax.swing.JMenu();
+        deleteAllCheckBox = new javax.swing.JCheckBoxMenuItem();
+        deleteTopCheckBox = new javax.swing.JCheckBoxMenuItem();
+        hitTestingOptionsMenu = new javax.swing.JMenu();
+        lineHitTestingMenu = new javax.swing.JMenu();
+        lineHitTestingEndPointsCheckBox = new javax.swing.JCheckBoxMenuItem();
+        lineHitTestingAlongCheckbox = new javax.swing.JCheckBoxMenuItem();
+        xorStrategyMenu = new javax.swing.JMenu();
+        xorStrategyONCheckBox = new javax.swing.JCheckBoxMenuItem();
+        xorStrategyOFFCheckBox = new javax.swing.JCheckBoxMenuItem();
+        imageBufferStrategyMenu = new javax.swing.JMenu();
+        imageBufferONCheckBox = new javax.swing.JCheckBoxMenuItem();
+        imageBufferOFFCheckBox = new javax.swing.JCheckBoxMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        drawingToolPanel.setMinimumSize(new java.awt.Dimension(250, 250));
+        drawingToolPanel.setMinimumSize(new java.awt.Dimension(500, 500));
         drawingToolPanel.setPreferredSize(new java.awt.Dimension(500, 500));
         getContentPane().add(drawingToolPanel, java.awt.BorderLayout.CENTER);
 
-        drawingToolMenu.setText("Drawing Tool");
+        drawingToolMenu.setText("DrawingTool");
 
         aboutMenuItem.setText("About");
         aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -51,7 +97,132 @@ public class DrawingToolFrame extends javax.swing.JFrame {
         });
         drawingToolMenu.add(aboutMenuItem);
 
+        exitMenuItem.setText("Exit");
+        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitMenuItemActionPerformed(evt);
+            }
+        });
+        drawingToolMenu.add(exitMenuItem);
+
         menuBar.add(drawingToolMenu);
+
+        editMenu.setText("Edit");
+
+        undoMenuItem.setText("Undo");
+        undoMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                undoMenuItemActionPerformed(evt);
+            }
+        });
+        editMenu.add(undoMenuItem);
+
+        clearMenuItem.setText("Clear");
+        clearMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearMenuItemActionPerformed(evt);
+            }
+        });
+        editMenu.add(clearMenuItem);
+
+        menuBar.add(editMenu);
+
+        optionsMenu.setText("Options");
+
+        deleteSchemeMenu.setText("Delete Scheme");
+        deleteSchemeMenu.setToolTipText("Allows user to set the action of the deletion tool");
+
+        deleteAllCheckBox.setSelected(true);
+        deleteAllCheckBox.setText("Delete All");
+        deleteAllCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteCheckBoxHandler(evt);
+            }
+        });
+        deleteSchemeMenu.add(deleteAllCheckBox);
+
+        deleteTopCheckBox.setSelected(true);
+        deleteTopCheckBox.setText("Delete Top");
+        deleteTopCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteCheckBoxHandler(evt);
+            }
+        });
+        deleteSchemeMenu.add(deleteTopCheckBox);
+
+        optionsMenu.add(deleteSchemeMenu);
+
+        hitTestingOptionsMenu.setText("Hit Testing");
+
+        lineHitTestingMenu.setText("Line");
+
+        lineHitTestingEndPointsCheckBox.setSelected(true);
+        lineHitTestingEndPointsCheckBox.setText("End Points");
+        lineHitTestingEndPointsCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lineHitTestingHandler(evt);
+            }
+        });
+        lineHitTestingMenu.add(lineHitTestingEndPointsCheckBox);
+
+        lineHitTestingAlongCheckbox.setSelected(true);
+        lineHitTestingAlongCheckbox.setText("Along Line");
+        lineHitTestingAlongCheckbox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lineHitTestingHandler(evt);
+            }
+        });
+        lineHitTestingMenu.add(lineHitTestingAlongCheckbox);
+
+        hitTestingOptionsMenu.add(lineHitTestingMenu);
+
+        optionsMenu.add(hitTestingOptionsMenu);
+
+        xorStrategyMenu.setText("XOR Strategy");
+
+        xorStrategyONCheckBox.setSelected(true);
+        xorStrategyONCheckBox.setText("ON");
+        xorStrategyONCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                xorStrategyCheckBoxHandler(evt);
+            }
+        });
+        xorStrategyMenu.add(xorStrategyONCheckBox);
+
+        xorStrategyOFFCheckBox.setSelected(true);
+        xorStrategyOFFCheckBox.setText("OFF");
+        xorStrategyOFFCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                xorStrategyCheckBoxHandler(evt);
+            }
+        });
+        xorStrategyMenu.add(xorStrategyOFFCheckBox);
+
+        optionsMenu.add(xorStrategyMenu);
+
+        imageBufferStrategyMenu.setText("ImageBuffer Strategy");
+
+        imageBufferONCheckBox.setSelected(true);
+        imageBufferONCheckBox.setText("ON");
+        imageBufferONCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                imageBufferCheckBoxHandler(evt);
+            }
+        });
+        imageBufferStrategyMenu.add(imageBufferONCheckBox);
+
+        imageBufferOFFCheckBox.setSelected(true);
+        imageBufferOFFCheckBox.setText("OFF");
+        imageBufferOFFCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                imageBufferCheckBoxHandler(evt);
+            }
+        });
+        imageBufferStrategyMenu.add(imageBufferOFFCheckBox);
+
+        optionsMenu.add(imageBufferStrategyMenu);
+
+        menuBar.add(optionsMenu);
 
         setJMenuBar(menuBar);
 
@@ -59,8 +230,66 @@ public class DrawingToolFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
 private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
-    
+    JOptionPane.showMessageDialog(this, ""
+            + "Product Information: \n"
+            + "Drawing Tool 1.0\n"
+            + "Author's Name: Zach Buckley\n"
+            + "Author's PID: zachb\n");
 }//GEN-LAST:event_aboutMenuItemActionPerformed
+
+private void undoMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoMenuItemActionPerformed
+    DrawingToolStatus dst = DrawingToolStatus.getInstance();
+    dst.removeLastShape();
+    dst.buildBuffer();
+    dst.redrawCanvas();
+    repaint();
+}//GEN-LAST:event_undoMenuItemActionPerformed
+
+private void clearMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearMenuItemActionPerformed
+    DrawingToolStatus dst = DrawingToolStatus.getInstance();
+    dst.clearShapes();
+    dst.buildBuffer();
+    dst.redrawCanvas();
+    repaint();
+}//GEN-LAST:event_clearMenuItemActionPerformed
+
+private void deleteCheckBoxHandler(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteCheckBoxHandler
+    DrawingToolStatus dts = DrawingToolStatus.getInstance();
+    
+    if(deleteAllCheckBox.isSelected()) {
+        dts.setCurrentDeleteType(DeleteType.DELETE_ALL);
+    } else {
+        dts.setCurrentDeleteType(DeleteType.DELETE_TOP);
+    }
+}//GEN-LAST:event_deleteCheckBoxHandler
+
+private void lineHitTestingHandler(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lineHitTestingHandler
+    DrawingToolStatus dts = DrawingToolStatus.getInstance();
+    
+    if(lineHitTestingAlongCheckbox.isSelected()) {
+        dts.setCurrentLineHitTestingType(LineHitTestingType.HIT_TESTING_ALONG);
+    } else {
+        dts.setCurrentLineHitTestingType(LineHitTestingType.HIT_TESTING_END_POINTS);
+    }
+}//GEN-LAST:event_lineHitTestingHandler
+
+private void xorStrategyCheckBoxHandler(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_xorStrategyCheckBoxHandler
+    DrawingToolStatus dts = DrawingToolStatus.getInstance();
+    dts.useXor(xorStrategyONCheckBox.isSelected());
+}//GEN-LAST:event_xorStrategyCheckBoxHandler
+
+private void imageBufferCheckBoxHandler(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_imageBufferCheckBoxHandler
+    DrawingToolStatus dts = DrawingToolStatus.getInstance();
+    dts.setUseBuffer(imageBufferONCheckBox.isSelected());
+}//GEN-LAST:event_imageBufferCheckBoxHandler
+
+private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
+    int ret = JOptionPane.showConfirmDialog(this, "Are you sure you want to Quit?", "Quitter", JOptionPane.YES_NO_OPTION);
+    if (ret == 0)
+        System.exit(0);
+    
+        
+}//GEN-LAST:event_exitMenuItemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -99,8 +328,30 @@ private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
+    private javax.swing.JMenuItem clearMenuItem;
+    private javax.swing.JCheckBoxMenuItem deleteAllCheckBox;
+    private javax.swing.JMenu deleteSchemeMenu;
+    private javax.swing.JCheckBoxMenuItem deleteTopCheckBox;
+    private javax.swing.ButtonGroup deleteTypeButtonGroup;
     private javax.swing.JMenu drawingToolMenu;
     private buckley.DrawingTool.gui.DrawingToolPanel drawingToolPanel;
+    private javax.swing.JMenu editMenu;
+    private javax.swing.JMenuItem exitMenuItem;
+    private javax.swing.JMenu hitTestingOptionsMenu;
+    private javax.swing.JCheckBoxMenuItem imageBufferOFFCheckBox;
+    private javax.swing.JCheckBoxMenuItem imageBufferONCheckBox;
+    private javax.swing.ButtonGroup imageBufferStrategyButtonGroup;
+    private javax.swing.JMenu imageBufferStrategyMenu;
+    private javax.swing.JCheckBoxMenuItem lineHitTestingAlongCheckbox;
+    private javax.swing.ButtonGroup lineHitTestingButtonGroup;
+    private javax.swing.JCheckBoxMenuItem lineHitTestingEndPointsCheckBox;
+    private javax.swing.JMenu lineHitTestingMenu;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenu optionsMenu;
+    private javax.swing.JMenuItem undoMenuItem;
+    private javax.swing.ButtonGroup xorStrategyButtonGroup;
+    private javax.swing.JMenu xorStrategyMenu;
+    private javax.swing.JCheckBoxMenuItem xorStrategyOFFCheckBox;
+    private javax.swing.JCheckBoxMenuItem xorStrategyONCheckBox;
     // End of variables declaration//GEN-END:variables
 }

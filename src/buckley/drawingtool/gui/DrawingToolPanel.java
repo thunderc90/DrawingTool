@@ -11,12 +11,9 @@
 package buckley.DrawingTool.gui;
 
 import buckley.DrawingTool.interfaces.Tool;
-import buckley.DrawingTool.enums.ToolType;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
-import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JColorChooser;
 
@@ -25,8 +22,6 @@ import javax.swing.JColorChooser;
  * @author Thunder
  */
 public class DrawingToolPanel extends javax.swing.JPanel {
-    
-    private Point drawStartPoint;
     
     /** Creates new form DrawingToolPanel */
     public DrawingToolPanel() {
@@ -47,27 +42,30 @@ public class DrawingToolPanel extends javax.swing.JPanel {
         toolSelectorPanel = new javax.swing.JPanel();
         toolSelectorLabel = new javax.swing.JLabel();
         toolSelectorComboBox = new javax.swing.JComboBox();
+        colorLabel = new javax.swing.JLabel();
         colorChooserPanel = new javax.swing.JPanel();
-        isFilledRadioButton = new javax.swing.JRadioButton();
-        undoButton = new javax.swing.JButton();
-        clearButton = new javax.swing.JButton();
+        widthLabel = new javax.swing.JLabel();
         lineWidthSlider = new javax.swing.JSlider();
-        canvas = canvas = new DrawingToolCanvas();
+        isFilledRadioButton = new javax.swing.JRadioButton();
+        canvas = new DrawingToolCanvas();
 
-        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 0, 0)));
+        setBorder(javax.swing.BorderFactory.createLineBorder(new Color(102, 0, 0)));
         setMinimumSize(new java.awt.Dimension(150, 150));
         setPreferredSize(new java.awt.Dimension(250, 250));
         setLayout(new java.awt.BorderLayout());
 
-        toolSelectorPanel.setBackground(new java.awt.Color(102, 0, 0));
+        toolSelectorPanel.setBackground(new Color(102, 0, 0));
+        toolSelectorPanel.setMaximumSize(new java.awt.Dimension(999999999, 999999999));
 
-        toolSelectorLabel.setForeground(new java.awt.Color(255, 102, 0));
+        toolSelectorLabel.setForeground(new Color(255, 102, 0));
         toolSelectorLabel.setText("Tool:");
+        toolSelectorLabel.setToolTipText("Tool Chooser Label");
         toolSelectorPanel.add(toolSelectorLabel);
 
-        toolSelectorComboBox.setBackground(new java.awt.Color(102, 0, 0));
-        toolSelectorComboBox.setForeground(new java.awt.Color(255, 102, 0));
+        toolSelectorComboBox.setBackground(new Color(102, 0, 0));
+        toolSelectorComboBox.setForeground(new Color(255, 102, 0));
         toolSelectorComboBox.setModel(new DefaultComboBoxModel<Tool>(DrawingToolStatus.getInstance().getToolList()));
+        toolSelectorComboBox.setToolTipText("Tool Chooser ComboBox");
         toolSelectorComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 toolSelectorComboBoxActionPerformed(evt);
@@ -75,8 +73,15 @@ public class DrawingToolPanel extends javax.swing.JPanel {
         });
         toolSelectorPanel.add(toolSelectorComboBox);
 
-        colorChooserPanel.setBackground(new java.awt.Color(255, 102, 0));
-        colorChooserPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 102, 0)));
+        colorLabel.setBackground(new Color(102, 0, 0));
+        colorLabel.setForeground(new Color(255, 102, 0));
+        colorLabel.setText("Color:");
+        colorLabel.setToolTipText("Color Chooser Label");
+        toolSelectorPanel.add(colorLabel);
+
+        colorChooserPanel.setBackground(new Color(255, 102, 0));
+        colorChooserPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(255, 102, 0)));
+        colorChooserPanel.setToolTipText("Color Chooser Button");
         colorChooserPanel.setPreferredSize(new java.awt.Dimension(30, 20));
         colorChooserPanel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -97,9 +102,32 @@ public class DrawingToolPanel extends javax.swing.JPanel {
 
         toolSelectorPanel.add(colorChooserPanel);
 
-        isFilledRadioButton.setBackground(new java.awt.Color(102, 0, 0));
-        isFilledRadioButton.setForeground(new java.awt.Color(255, 102, 0));
+        widthLabel.setForeground(new Color(255, 102, 0));
+        widthLabel.setText("Width: 2");
+        widthLabel.setToolTipText("Current Line Width");
+        toolSelectorPanel.add(widthLabel);
+
+        lineWidthSlider.setBackground(new Color(102, 0, 0));
+        lineWidthSlider.setForeground(new Color(255, 102, 0));
+        lineWidthSlider.setMajorTickSpacing(10);
+        lineWidthSlider.setMaximum(50);
+        lineWidthSlider.setMinimum(1);
+        lineWidthSlider.setMinorTickSpacing(5);
+        lineWidthSlider.setPaintTicks(true);
+        lineWidthSlider.setToolTipText("Line Width Slider");
+        lineWidthSlider.setValue(2);
+        lineWidthSlider.setPreferredSize(new java.awt.Dimension(100, 23));
+        lineWidthSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                lineWidthSliderStateChanged(evt);
+            }
+        });
+        toolSelectorPanel.add(lineWidthSlider);
+
+        isFilledRadioButton.setBackground(new Color(102, 0, 0));
+        isFilledRadioButton.setForeground(new Color(255, 102, 0));
         isFilledRadioButton.setText("Filled");
+        isFilledRadioButton.setToolTipText("Fill Shape CheckBox");
         isFilledRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 isFilledRadioButtonActionPerformed(evt);
@@ -107,34 +135,15 @@ public class DrawingToolPanel extends javax.swing.JPanel {
         });
         toolSelectorPanel.add(isFilledRadioButton);
 
-        undoButton.setBackground(new java.awt.Color(102, 0, 0));
-        undoButton.setForeground(new java.awt.Color(255, 102, 0));
-        undoButton.setText("Undo");
-        undoButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                undoButtonActionPerformed(evt);
-            }
-        });
-        toolSelectorPanel.add(undoButton);
-
-        clearButton.setBackground(new java.awt.Color(102, 0, 0));
-        clearButton.setForeground(new java.awt.Color(255, 102, 0));
-        clearButton.setText("Clear");
-        toolSelectorPanel.add(clearButton);
-
-        lineWidthSlider.setBackground(new java.awt.Color(102, 0, 0));
-        lineWidthSlider.setForeground(new java.awt.Color(255, 102, 0));
-        lineWidthSlider.setPreferredSize(new java.awt.Dimension(50, 20));
-        toolSelectorPanel.add(lineWidthSlider);
-
         add(toolSelectorPanel, java.awt.BorderLayout.PAGE_START);
 
+        canvas.setBackground(new Color(255, 255, 255));
         canvas.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                canvasMouseReleased(evt);
-            }
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 canvasMousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                canvasMouseReleased(evt);
             }
         });
         canvas.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
@@ -152,27 +161,8 @@ private void toolSelectorComboBoxActionPerformed(java.awt.event.ActionEvent evt)
     DrawingToolStatus dts = DrawingToolStatus.getInstance();
     
     dts.setCurrentTool(t);
-    
-    //adjust toolselection bar for tooltype
-    switch(dts.getCurrentToolType()) {
-        case SHAPE_MAKER_TOOL:
-            colorChooserPanel.setVisible(true);
-            isFilledRadioButton.setVisible(false);
-            lineWidthSlider.setVisible(true);
-            break;
-        case SHAPE_MAKER_TOOL_FILLABLE:
-            colorChooserPanel.setVisible(true);
-            isFilledRadioButton.setVisible(true);
-            lineWidthSlider.setVisible(true);
-        case MANIPULATOR_TOOL:
-            colorChooserPanel.setVisible(false);
-            isFilledRadioButton.setVisible(false);
-            lineWidthSlider.setVisible(false);
-            break;
-        default: 
-            break;
-    }
-    
+    //added to avoid area under combobox not reappearing.
+    dts.redrawCanvas();      
     repaint();
 }//GEN-LAST:event_toolSelectorComboBoxActionPerformed
 
@@ -191,27 +181,30 @@ private void isFilledRadioButtonActionPerformed(java.awt.event.ActionEvent evt) 
     repaint();
 }//GEN-LAST:event_isFilledRadioButtonActionPerformed
 
-private void undoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoButtonActionPerformed
-    DrawingToolStatus.getInstance().removeLastShape();
-    repaint();
-}//GEN-LAST:event_undoButtonActionPerformed
-
 private void canvasMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canvasMouseDragged
-    DrawingToolStatus.getInstance().getCurrentTool().performAction(
-            evt.getPoint());
+    DrawingToolStatus dts = DrawingToolStatus.getInstance();
+    
+    dts.getCurrentTool().performAction(evt.getPoint(), (Graphics2D)canvas.getGraphics());
     repaint();
 }//GEN-LAST:event_canvasMouseDragged
 
 private void canvasMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canvasMouseReleased
-    DrawingToolStatus.getInstance().getCurrentTool().mouseReleased();
+    DrawingToolStatus dts = DrawingToolStatus.getInstance();
+    dts.getCurrentTool().mouseReleased((Graphics2D)canvas.getGraphics());
     repaint();
 }//GEN-LAST:event_canvasMouseReleased
 
 private void canvasMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canvasMousePressed
-    DrawingToolStatus.getInstance().getCurrentTool().performAction(
-            evt.getPoint());
+    DrawingToolStatus dts = DrawingToolStatus.getInstance();
+    dts.getCurrentTool().performAction(evt.getPoint(), (Graphics2D)canvas.getGraphics());
     repaint();
 }//GEN-LAST:event_canvasMousePressed
+
+private void lineWidthSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_lineWidthSliderStateChanged
+    DrawingToolStatus.getInstance().setCurrentLineWidth(lineWidthSlider.getValue());
+    widthLabel.setText("Width: " + lineWidthSlider.getValue());
+    repaint();
+}//GEN-LAST:event_lineWidthSliderStateChanged
 
     @Override
 public void paintComponent(Graphics g){
@@ -219,19 +212,47 @@ public void paintComponent(Graphics g){
     
     DrawingToolStatus dts = DrawingToolStatus.getInstance();
     
-    canvas.repaint();
+    //adjust toolselection bar for tooltype
+    switch(dts.getCurrentToolType()) {
+        case SHAPE_MAKER_TOOL:
+            colorLabel.setVisible(true);
+            colorChooserPanel.setVisible(true);
+            isFilledRadioButton.setVisible(false);
+            widthLabel.setVisible(true);
+            lineWidthSlider.setVisible(true);
+            break;
+        case SHAPE_MAKER_TOOL_FILLABLE:
+            colorLabel.setVisible(true);
+            colorChooserPanel.setVisible(true);
+            isFilledRadioButton.setVisible(true);
+            widthLabel.setVisible(!isFilledRadioButton.isSelected());
+            lineWidthSlider.setVisible(!isFilledRadioButton.isSelected());
+            break;
+        case MANIPULATOR_TOOL:
+            colorLabel.setVisible(false);
+            colorChooserPanel.setVisible(false);
+            isFilledRadioButton.setVisible(false);
+            widthLabel.setVisible(false);
+            lineWidthSlider.setVisible(false);
+            break;
+        default: 
+            break;     
+    }
+    
+    if(dts.redrawCanvas())
+            canvas.repaint();
          
 }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private java.awt.Canvas canvas;
-    private javax.swing.JButton clearButton;
     private javax.swing.JPanel colorChooserPanel;
+    private javax.swing.JLabel colorLabel;
     private javax.swing.JRadioButton isFilledRadioButton;
     private javax.swing.JSlider lineWidthSlider;
     private javax.swing.JComboBox toolSelectorComboBox;
     private javax.swing.JLabel toolSelectorLabel;
     private javax.swing.JPanel toolSelectorPanel;
-    private javax.swing.JButton undoButton;
+    private javax.swing.JLabel widthLabel;
     // End of variables declaration//GEN-END:variables
 }

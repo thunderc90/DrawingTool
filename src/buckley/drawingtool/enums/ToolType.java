@@ -11,5 +11,5 @@ package buckley.DrawingTool.enums;
 public enum ToolType {
     MANIPULATOR_TOOL,
     SHAPE_MAKER_TOOL,
-    SHAPE_MAKER_TOOL_FILLABLE;
+    SHAPE_MAKER_TOOL_FILLABLE
 }
